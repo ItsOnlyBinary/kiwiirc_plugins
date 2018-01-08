@@ -1,4 +1,4 @@
-var refresh_url;
+var refresh_url = ['https://source.unsplash.com/random/?nature', 'https://source.unsplash.com/random/?animals'];
 var target_div;
 
 kiwi.plugin('image_refresh', function() {  
@@ -25,15 +25,21 @@ kiwi.plugin('image_refresh', function() {
         
         addLoadEvent(function () {
             target_div.insertBefore(div, target_div.childNodes[0]);
+            if (refresh_url instanceof Array) {
+                refresh_img();
+            }
         });
     }
 });
 
 function refresh_img() {
-    if (refresh_url == null) {
+    if (typeof refresh_url == 'undefined') {
         refresh_url = target_div.style.backgroundImage;
     }
-    if (refresh_url != null) {
+    if (typeof refresh_url == 'string') {
         target_div.style.backgroundImage = refresh_url.replace(/\?/i, '?ctime=' + Math.floor(new Date().getTime() / 1000) + '&');
+    }
+    else if (refresh_url instanceof Array && refresh_url.length > 0) {
+        target_div.style.backgroundImage = 'url("' + refresh_url[Math.floor(Math.random() * refresh_url.length)] + '&ctime=' + Math.floor(new Date().getTime() / 1000) + '")';
     }
 }
